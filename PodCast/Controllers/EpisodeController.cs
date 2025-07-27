@@ -2,6 +2,8 @@
 using Microsoft.EntityFrameworkCore;
 using PodCast.DataContext;
 using PodCast.Models;
+using System.Text.Json;
+using System.Text.Json.Serialization;
 
 namespace PodCast.Controllers
 {
@@ -52,5 +54,22 @@ namespace PodCast.Controllers
 
             return View(model);
         }
+
+        public IActionResult Partial(int skip)
+        {
+            var episodes = _dbContext.Episodes
+                .Include(x => x.Speaker)
+                .ThenInclude(x => x!.SpeakerProfessions)
+                .ThenInclude(x => x.Profession)
+                .Skip(skip)
+                .Take(2)
+                .ToList();
+
+            //return Json(episodes,new JsonSerializerOptions { ReferenceHandler = ReferenceHandler.IgnoreCycles});
+
+            return PartialView("_EpisodePartialForLoadMore", episodes);
+        }
     }
+
+    
 }
