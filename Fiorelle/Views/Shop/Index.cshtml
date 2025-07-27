@@ -1,0 +1,11 @@
+﻿@{
+    ShopViewModel model = Model;
+    var categories = model.Categories;
+    var products = model.Products;
+}
+
+<!-- PRODUCTS START -->
+
+<partial name="_ProductsPartial" model="new ProductPartialViewModel{Products = products, Categories = categories}"></partial>
+
+<!-- PRODUCTS END -->
